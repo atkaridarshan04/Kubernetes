@@ -40,7 +40,7 @@ Provides examples and use cases for implementing Kubernetes **Network Policies**
 
 ---  
 
-### **[pv_&_pvs](./pv_&_pvs)**  
+### **[pv_&_pvc](./pv_&_pvc)**  
 Covers **Persistent Volumes (PV)** and **Persistent Volume Claims (PVC)**:  
 - Explains the difference between static and dynamic provisioning.  
 - Demonstrates how to persist data for stateful applications.  
