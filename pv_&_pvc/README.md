@@ -6,7 +6,18 @@ In this guide, we will set up a **MongoDB StatefulSet** with persistent storage 
 
 ## **Steps: MongoDB with Persistent Storage**
 
-### **1. Create a Persistent Volume (Static Provisioning)**
+### **1. Create Minikube cluster**
+```bash
+minikube start --driver=docker
+```
+
+Verify Cluster
+```bash
+kubectl cluster-info
+```
+---
+
+### **2. Create a Persistent Volume (Static Provisioning)**
 
 Define a **Persistent Volume (PV)** that uses a host path for storage.
 
@@ -23,6 +34,7 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   hostPath:
     path: "/mnt/data"
+  storageClassName: manual
 ```
 
 #### **Commands to Verify PV:**
@@ -37,7 +49,7 @@ spec:
 
 ---
 
-### **2. Create a Persistent Volume Claim**
+### **3. Create a Persistent Volume Claim**
 
 Define a **Persistent Volume Claim (PVC)** to bind to the PV.
 
@@ -52,6 +64,7 @@ spec:
   resources:
     requests:
       storage: 500Mi
+  storageClassName: manual
 ```
 
 #### **Commands to Verify PVC:**
@@ -66,7 +79,7 @@ spec:
 
 ---
 
-### **3. Deploy MongoDB as a StatefulSet**
+### **4. Deploy MongoDB as a StatefulSet**
 
 Deploy MongoDB as a **StatefulSet**, attaching the PVC to the pod.
 
@@ -88,7 +101,7 @@ spec:
     spec:
       containers:
         - name: mongodb
-          image: mongo
+          image: mongo:4.4
           ports:
             - containerPort: 27017
           volumeMounts:
@@ -106,6 +119,7 @@ spec:
   kubectl get pods
   ```
 
+![image_1](./assets/Image_1.png)
 ---
 
 ## **Verification Steps**
@@ -129,6 +143,8 @@ spec:
    db.sample.find()
    ```
 
+   ![image_2](./assets/Image_2.png)
+
 ---
 
 ### **2. Check Persistent Data on Minikube Host**
@@ -142,6 +158,7 @@ spec:
    ```
    You should see the MongoDB data files.
 
+    ![image_3](./assets/Image_3.png)
 ---
 
 ### **3. Delete and Recreate the Pod**
@@ -159,6 +176,8 @@ spec:
    db.sample.find()
    ```
    The previously inserted data should still be present.
+
+    ![image_4](./assets/Image_4.png)
 
 ---
 
